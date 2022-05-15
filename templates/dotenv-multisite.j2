@@ -1,0 +1,44 @@
+DEBUG=true
+SPLUNK_HOME=/opt/splunk
+SPLUNK_GROUP=splunk
+SPLUNK_USER=splunk
+TMPSPLUNKDIR=${SPLUNK_HOME}/tmp
+TMPETCDIR=${TMPSPLUNKDIR}/etc
+SPLUNK_ANSIBLE_HOME=/opt/ansible
+ANSIBLE_USER=ansible
+ANSIBLE_GROUP=ansible
+SPLUNK_ANSIBLE_REPO=https://github.com/splunk/splunk-ansible.git
+SPLUNK_ANSIBLE_BRANCH={{version}}
+SPLUNK_PRODUCT=splunk
+SPLUNK_VERSION={{version}}
+SPLUNK_BUILD={{build}}
+SPLUNK_LINUX_FILENAME=splunk-${SPLUNK_VERSION}-${SPLUNK_BUILD}-Linux-x86_64.tgz
+SPLUNK_LINUX_BUILD_URL=https://download.splunk.com/products/${SPLUNK_PRODUCT}/releases/${SPLUNK_VERSION}/linux/${SPLUNK_LINUX_FILENAME}
+SPLUNK_BUILD_URL=${SPLUNK_LINUX_BUILD_URL}
+SPLUNK_BUILD_TYPE=tgz
+SPLUNK_HTTP_ENABLESSL=true
+SPLUNK_ENABLE_SERVICE=true
+SPLUNK_LICENSE_URI={{license_uri}}
+SPLUNK_PASSWORD={{password}}
+SPLUNK_SHC_PASS4SYMMKEY={{shc_pass4symmkey}}
+SPLUNK_SHC_LABEL={{shc_label}}
+SPLUNK_IDXC_PASS4SYMMKEY={{idxc_pass4symmkey}}
+SPLUNK_IDXC_DISCOVERYPASS4SYMMKEY={{idxc_discoverypass4symmkey}}
+SPLUNK_IDXC_LABEL={{idxc_label}}
+SPLUNK_PASS4SYMMKEY={{pass4symmkey}}
+SPLUNK_DEPLOYER_URL={{ groups['splunk_deployer'] | join(',') }}
+SPLUNK_CLUSTER_MASTER_URL={{ groups['splunk_cluster_master'] | first }}
+SPLUNK_INDEXER_URL={{ groups['splunk_indexer'] | join(',') }}
+SPLUNK_SEARCH_HEAD_CAPTAIN_URL={{ groups['splunk_search_head_captain'] | first }}
+SPLUNK_SEARCH_HEAD_URL={{ groups['splunk_search_head'] | join(',') }}
+SPLUNK_MULTISITE_MASTER={{ groups['splunk_cluster_master'] | first }}
+SPLUNK_MULTISITE_REPLICATION_FACTOR_ORIGIN={{multisite_replication_factor_origin}}
+SPLUNK_MULTISITE_REPLICATION_FACTOR_TOTAL={{multisite_replication_factor_total}}
+SPLUNK_MULTISITE_SEARCH_FACTOR_ORIGIN={{multisite_search_factor_origin}}
+SPLUNK_MULTISITE_SEARCH_FACTOR_TOTAL={{multisite_search_factor_total}}
+SPLUNK_ALL_SITES={{ all_sites | join(',') }}
+{% if ansible_fqdn in groups['site1'] %}\
+SPLUNK_SITE=site1
+{% else %}
+SPLUNK_SITE=site2
+{% endif %}

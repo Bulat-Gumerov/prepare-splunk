@@ -1,0 +1,31 @@
+- name: Setup groups
+  group:
+    name: "{{ item.group }}"
+    gid: "{{ item.gid }}"
+  with_items:
+    - { group: 'ansible', gid: '41813' } # These UIDs and GIDs are hardcoded by Splunk
+    - { group: 'splunk', gid: '41812' }
+    # - { group: 'wheel' }
+  become: true
+
+- name: Allow 'wheel' group to have passwordless sudo
+  lineinfile:
+    dest: /etc/sudoers
+    regexp: '^%wheel'
+    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+  become: true
+
+- name: add required user groups
+  user:
+    name: "{{ item.name }}"
+    groups: "{{ item.groups }}"
+    password: "{{ item.password }}"
+    append: yes
+    createhome: yes
+    uid: "{{ item.uid }}"
+  with_items:
+    - { name: 'ansible', groups: 'wheel', uid: '41813' }
+    - { name: 'ansible', groups: 'ansible', uid: '41813' }
+    - { name: 'splunk', groups: 'splunk' , uid: '41812'}
+  become: true

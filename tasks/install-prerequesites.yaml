@@ -1,0 +1,16 @@
+- name: install requeired packages
+  package:
+    name:
+      - glibc
+      - tzdata
+      - shadow-utils
+      - procps
+      - tar
+      - tzdata
+      - busybox
+      - libffi-devel
+      - redhat-rpm-config
+      - gcc
+      - openssl-devel
+      - requests
+    state: latest

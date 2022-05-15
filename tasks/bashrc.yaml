@@ -1,0 +1,23 @@
+# - name: Adding SSH motd banner
+#   copy: src=motd dest=/etc/motd mode=0755
+
+- name: Copy .bashrc for users
+  copy:
+    src: "{{ role_path }}/files/.bashrc"
+    dest: "/home/{{ item }}/.bashrc"
+    mode: 0755
+    owner: "{{ item }}"
+    group: "{{ item }}"
+  with_items:
+    - ansible
+    - splunk
+    # - cloud-user
+  become: true
+
+- name: Copy .bashrc for root
+  copy: 
+    src: "{{ role_path }}/files/.bashrc"
+    dest: /root/.bashrc
+    mode: 0755
+    force: true
+  become: true

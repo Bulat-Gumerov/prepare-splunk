@@ -1,0 +1,12 @@
+# - lineinfile:
+#     dest: /root/.env
+#     state: present
+#     insertafter: EOF
+#     line: 'SPLUNK_ROLE={{ item }}'
+
+- lineinfile:
+    dest: /root/.bashrc
+    state: present
+    insertafter: EOF
+    line: 'export SPLUNK_ROLE={{ item }}'
+  become: true

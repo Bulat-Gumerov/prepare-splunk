@@ -1,0 +1,2 @@
+enable_vsphere_vm_timesync: false
+selinux_disabled: true

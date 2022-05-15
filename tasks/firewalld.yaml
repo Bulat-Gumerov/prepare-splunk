@@ -1,0 +1,25 @@
+- name: restart firewalld service
+  systemd:
+    state: restarted
+    name: firewalld
+  become: true
+
+- name: Open firewall ports for Splunk
+  firewalld:
+    port: "{{ item }}"
+    permanent: yes
+    immediate: yes
+    state: enabled
+  loop:
+  - 8000/tcp
+  - 8065/tcp
+  - 8080/tcp
+  - 8081/tcp
+  - 8088/tcp
+  - 8089/tcp
+  - 8181/tcp
+  - 8191/tcp
+  - 9777/tcp
+  - 9887/tcp
+  - 9997/tcp
+  become: true

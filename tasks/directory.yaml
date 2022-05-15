@@ -1,0 +1,35 @@
+- name: Create $SPLUNK_HOME and $SPLUNK_ANSIBLE_HOME directories if they not exist
+  file:
+    path: "/opt/{{ item }}"
+    state: directory
+    mode: '0755'
+    owner: "{{ item }}"
+    group: "{{ item }}"
+  with_items:
+    - ansible
+    - splunk
+  become: true
+
+- name: Create $TMPSPLUNKDIR and $TMPETCDIR directories if they not exist
+  file:
+    path: "/opt/splunk/{{ item }}"
+    state: directory
+    mode: '0755'
+    owner: splunk
+    group: splunk
+  with_items:
+    - tmp
+    - etc
+  become: true
+
+- name: Create /opt/container_artifact directory
+  file:
+    path: "/opt/container_artifact"
+    state: directory
+  become: true
+
+# - name: Download Splunk installation archive and untar it
+#   unarchive:
+#     src: "{{ lookup('env','SPLUNK_BUILD_URL') }}"
+#     dest: /opt/splunk
+#     remote_src: yes

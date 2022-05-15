@@ -1,0 +1,56 @@
+- name: Update all packages
+  import_tasks: dnf.yml
+  when: package_update_needed is not defined
+
+- include_tasks: pip.yml
+
+- name: Create LVM and mount data disk
+  import_tasks: create-fs.yaml
+  when: inventory_hostname in groups['splunk_indexer'] and lvm_created is not defined
+
+- name: setup-users-and-groups
+  import_tasks: setup-users-and-groups.yaml
+
+- name: Open firewall ports for splunk
+  import_tasks: firewalld.yaml
+
+- name: Disable SELinux
+  import_tasks: selinux.yml
+  when: selinux_disabled|bool
+
+- name: Enable time sync in VSphere VM
+  import_tasks: enable-vsphere-timesync.yml
+  when: enable_vsphere_vm_timesync|bool
+
+- name: Copy .bashrc
+  import_tasks: bashrc.yaml
+
+# - import_tasks: template.yml
+
+- name: Modify SPLUNK_ROLE
+  include_tasks: modify_role.yaml
+  when: inventory_hostname in groups['{{ item }}']
+  with_items:
+  - splunk_cluster_master
+  - splunk_indexer
+  - splunk_search_head_captain
+  - splunk_search_head
+  - splunk_heavy_forwarder
+  - splunk_deployer
+  - splunk_deployment_server
+  - splunk_license_master
+  - splunk_monitor
+  - splunk_standalone
+  - splunk_universal_forwarder
+
+- name: Update /etc/hosts file
+  import_tasks: hosts.yaml
+
+- name: Prepare splunk directory
+  import_tasks: directory.yaml
+
+- name: Git clone splunk-ansible repo
+  import_tasks: git-clone.yaml
+
+- name: Create /tmp/default/ directory and copy default.yaml
+  import_tasks: default.yaml

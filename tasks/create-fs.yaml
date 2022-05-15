@@ -1,0 +1,25 @@
+- block:
+  - set_fact:
+      lvm_created: yes
+
+  - name: Create a new primary partition
+    parted:
+      device: /dev/vdb
+      flags: [ lvm ]
+      number: 1
+      state: present
+
+  - name: Create LVM filesystem on /dev/vdb
+    filesystem:
+      fstype: ext4
+      force: yes
+      dev: /dev/vdb
+
+  - name: Mount disk
+    mount:
+      path: /opt/splunk
+      src: /dev/vdb
+      fstype: ext4
+      state: mounted
+
+  become: yes

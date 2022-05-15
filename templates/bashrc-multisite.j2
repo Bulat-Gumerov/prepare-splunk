@@ -1,0 +1,70 @@
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+alias diff='diff --color=auto'
+alias python='python3'
+alias cd2='cd ../..'
+alias cd3='cd ../../..'
+alias perm='stat -c "%a %n" '
+alias ghi='history|grep'
+alias dnfs='dnf search'
+alias dnfi='sudo dnf install -y'
+alias dco='docker-compose'
+alias lss='ls -lhFAS'
+alias dps='docker ps -a'
+alias dsp='docker system prune -f --volumes'
+alias dl='docker logs -f'
+alias dx='docker exec -it'
+alias dbt='docker build . -t'
+alias di='docker images'
+alias dr='docker run -it'
+alias drm='docker rm'
+alias drmi='docker rmi'
+if [ -f /etc/bashrc ]; then
+        . /etc/bashrc
+fi
+export DEBUG=true
+export SPLUNK_HOME=/opt/splunk
+export SPLUNK_GROUP=splunk
+export SPLUNK_USER=splunk
+export TMPSPLUNKDIR=${SPLUNK_HOME}/tmp
+export TMPETCDIR=${TMPSPLUNKDIR}/etc
+export SPLUNK_ANSIBLE_HOME=/opt/ansible
+export ANSIBLE_USER=ansible
+export ANSIBLE_GROUP=ansible
+export SPLUNK_ANSIBLE_REPO=https://github.com/splunk/splunk-ansible.git
+export SPLUNK_ANSIBLE_BRANCH={{version}}
+export SPLUNK_PRODUCT=splunk
+export SPLUNK_VERSION={{version}}
+export SPLUNK_BUILD={{build}}
+export SPLUNK_LINUX_FILENAME=splunk-${SPLUNK_VERSION}-${SPLUNK_BUILD}-Linux-x86_64.tgz
+export SPLUNK_LINUX_BUILD_URL=https://download.splunk.com/products/${SPLUNK_PRODUCT}/releases/${SPLUNK_VERSION}/linux/${SPLUNK_LINUX_FILENAME}
+export SPLUNK_BUILD_URL=${SPLUNK_LINUX_BUILD_URL}
+export SPLUNK_BUILD_TYPE=tgz
+export SPLUNK_HTTP_ENABLESSL=true
+export SPLUNK_ENABLE_SERVICE=true
+export SPLUNK_LICENSE_URI={{license_uri}}
+export SPLUNK_PASSWORD={{password}}
+export SPLUNK_SHC_PASS4SYMMKEY={{shc_pass4symmkey}}
+export SPLUNK_SHC_LABEL={{shc_label}}
+export SPLUNK_IDXC_PASS4SYMMKEY={{idxc_pass4symmkey}}
+export SPLUNK_IDXC_DISCOVERYPASS4SYMMKEY={{idxc_discoverypass4symmkey}}
+export SPLUNK_IDXC_LABEL={{idxc_label}}
+export SPLUNK_PASS4SYMMKEY={{pass4symmkey}}
+export SPLUNK_DEPLOYER_URL={{ groups['splunk_deployer'] | join(',') }}
+export SPLUNK_CLUSTER_MASTER_URL={{ groups['splunk_cluster_master'] | first }}
+export SPLUNK_INDEXER_URL={{ groups['splunk_indexer'] | join(',') }}
+export SPLUNK_SEARCH_HEAD_CAPTAIN_URL={{ groups['splunk_search_head_captain'] | first }}
+export SPLUNK_SEARCH_HEAD_URL={{ groups['splunk_search_head'] | join(',') }}
+export SPLUNK_MULTISITE_MASTER={{ groups['splunk_cluster_master'] | first }}
+export SPLUNK_MULTISITE_REPLICATION_FACTOR_ORIGIN={{multisite_replication_factor_origin}}
+export SPLUNK_MULTISITE_REPLICATION_FACTOR_TOTAL={{multisite_replication_factor_total}}
+export SPLUNK_MULTISITE_SEARCH_FACTOR_ORIGIN={{multisite_search_factor_origin}}
+export SPLUNK_MULTISITE_SEARCH_FACTOR_TOTAL={{multisite_search_factor_total}}
+export SPLUNK_ALL_SITES={{ all_sites | join(',') }}
+{% if ansible_fqdn in groups['site1'] %}\
+export SPLUNK_SITE=site1
+{% else %}
+export SPLUNK_SITE=site2
+{% endif %}

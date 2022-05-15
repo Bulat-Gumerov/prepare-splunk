@@ -1,0 +1,24 @@
+- name: Install git
+  package:
+    name: git
+    state: latest
+  become: true
+
+- name: Git checkout
+  git:
+    repo: 'https://github.com/splunk/splunk-ansible.git'
+    dest: /opt/ansible
+    depth: 1
+    force: yes
+    version: "{{ version }}"
+    # version: develop
+  become: true
+  become_user: ansible
+
+- name: Modify inverntory script sherbang to python3
+  lineinfile:
+    path: /opt/ansible/inventory/environ.py
+    regexp: '^#!/usr/bin/env python'
+    insertafter: '^#!/usr/bin/env python '
+    line: '#!/usr/bin/env python3'
+  become: true

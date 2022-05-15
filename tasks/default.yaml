@@ -1,0 +1,10 @@
+- file:
+    path: /tmp/defaults/
+    state: directory
+    mode: 0755
+
+- name: Copy default.yml
+  copy: 
+    src: container.yml
+    dest: /tmp/defaults/default.yml
+    mode: 0755

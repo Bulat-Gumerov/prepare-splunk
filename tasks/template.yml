@@ -1,0 +1,9 @@
+# - name: Create the .env file from template
+#   template:
+#     src: "{{ role_path }}/templates/dotenv-multisite.j2"
+#     dest: "/root/.env"
+
+- name: Create the .bashrc file from template
+  template:
+    src: "{{ role_path }}/templates/bashrc-multisite.j2"
+    dest: "/root/.bashrc"

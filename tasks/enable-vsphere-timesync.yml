@@ -1,0 +1,3 @@
+- name: Enable Vsphere VM time sync with the host
+  command: vmware-toolbox-cmd timesync enable
+  when: enable_vsphere_vm_timesync == true

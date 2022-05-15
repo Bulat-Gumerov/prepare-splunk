@@ -1,0 +1,50 @@
+- block:
+  # - name: Switch from CentOS 8.2 to 8.x Stream
+  #   shell: |
+  #     sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
+  #     sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
+  #     dnf -y --disablerepo '*' --allowerasing --skip-broken --enablerepo=extras swap centos-linux-repos centos-stream-repos
+  #     dnf distro-sync -y
+  #   when: (ansible_facts['distribution'] == "CentOS" and ansible_facts['distribution_major_version'] == "8")
+  #   ignore_errors: yes
+
+  - name: Upgrade all packages
+    package:
+      name: "*"
+      state: latest
+    ignore_errors: yes
+
+  - name: Install dnf packages on CentOS 9
+    package:
+      name:
+      - ansible-core
+      - ansible-collection-ansible-posix
+      - python3-pip-wheel
+      - python3-setuptools-wheel
+    when: (ansible_facts['distribution'] == "CentOS" and ansible_facts['distribution_major_version'] == "9")
+
+  - name: Install dnf packages on CentOS 8
+    package:
+      name:
+      # - ansible-core
+      - tar
+      - gzip
+      - python3-pip-wheel
+      - python3-setuptools-wheel
+    when: (ansible_facts['distribution'] == "CentOS" and ansible_facts['distribution_major_version'] == "8")
+
+  # - name: Install pip packages on CentOS 7 & 8
+  #   shell: pip install ansible
+  #   when: (ansible_facts['distribution'] == "CentOS" and ansible_facts['distribution_major_version'] >= "7")
+
+  - name: Install pip packages on CentOS 7 & 8
+    pip:
+      name:
+      - wheel
+      # - pip
+      - ansible
+    when: (ansible_facts['distribution'] == "CentOS" and ansible_facts['distribution_major_version'] >= "7")
+
+  - set_fact:
+      package_update_needed: false
+  become: yes
